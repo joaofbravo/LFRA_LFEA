@@ -32,7 +32,7 @@ void tableLatex()
 
 			// Data treatment
 			N1[i] = y;
-			eN1[i] = sqrt(y); // Aldrabanço de erros do crlh
+			eN1[i] = sqrt(y);
 			N2[i] = z;
 			eN2[i] = sqrt(z);
 			N[i] = y + z;
@@ -61,7 +61,7 @@ void tableLatex()
 			tableLatex <<          N1[i] << " $\\pm$ " << int(eN1[i] + 0.5)  
 			<< " & " << N2[i] << " $\\pm$ " << int(eN2[i] + 0.5)
 			<< " & " << N[i]  << " $\\pm$ " << int(eN[i] + 0.5) 
-			<< " & " << Rm[i] << " $\\pm$ " << eRm[i]
+			<< " & " << Rm[ei] << " $\\pm$ " << eRm[i]
 			<< " & " << R[i]  << " $\\pm$ " << eR[i]	    
 			<< " \\\\" << endl;   
 		}
