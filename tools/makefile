@@ -21,7 +21,7 @@ run: $(DIR)/$(EXEC).exe
 	@echo "\n" $(<F) "\n"
 	@./$<
 
-% : $(DIR)/%.exe
+r% : $(DIR)/%.exe
 	@echo "\n" $(<F) "\n"
 	@./$<
 
