@@ -1,4 +1,7 @@
-DIR = geigermuller
+# Basta mudarem a variavel DIR e a EXEC
+
+DIR  = geigermuller
+EXEC = curvaresposta
 
 ROOTINC = $(shell root-config --cflags)
 ROOTLIB = $(shell root-config --libs)
@@ -10,17 +13,28 @@ CC = $(shell root-config --cxx) -std=c++11 $(ROOTINC)
 RM = rm -f
 
 .PRECIOUS: %.exe
-.PHONY: % warn warnall debug clean clean%
+.PHONY: run main warn warnall debug clean clean%
 
 ########## Obj, Comp, Exec
 
-main: $(DIR)/curvaresposta.exe
+run: $(DIR)/$(EXEC).exe
 	@echo "\n" $(<F) "\n"
 	@./$<
+
+% : $(DIR)/%.exe
+	@echo "\n" $(<F) "\n"
+	@./$<
+
+main: $(DIR)/$(EXEC).exe
+	@true
 
 %.exe: %.o
 	@echo Linking $(@F) from $(^F)
 	@$(CC) -o $@ $^ $(ROOTLIB)
+
+%.exe: $(DIR)/%.o
+	@echo Relinking $(@F) from $(^F)
+	@$(CC) -o $(DIR)/$@ $^ $(ROOTLIB)
 
 %.o: %.cpp
 	@echo Compiling $(^F)
@@ -44,10 +58,10 @@ debug:
 
 clean:
 	@echo Cleaning...
-	$(RM) */*.o
-	$(RM) */*.exe
-	$(RM) */*.pdf
-	@$(RM) */*~
+	$(RM) $(DIR)/*.o
+	$(RM) $(DIR)/*.exe
+	$(RM) $(DIR)/*.pdf
+	@$(RM) $(DIR)/*~
 
 clean%:
 	@echo Cleaning $(patsubst clean%,%,$@) in LFRA folders...
