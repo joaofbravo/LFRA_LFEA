@@ -28,7 +28,7 @@ double fitfcn(double *x, double *par)
 
 using namespace std;
 int main(){
-    string FILE1 = "GM/RateNaoCorrigido.data";
+    string FILE1 = "geigermuller/RateNaoCorrigido.data";
     vector<TGraphErrors*> DataSaver;
     DataSaver.push_back(new TGraphErrors(FILE1.c_str(),"%lg %lg %lg",""));
     
@@ -55,14 +55,13 @@ int main(){
     func->SetLineWidth(3);
     DataSaver[0]->Fit("myfit", "U", "N");
     
-    cout << func->GetChisquare() << endl;
+    cout << "Chi2: " <<func->GetChisquare() << endl;
     
     c->Modified();
     c->Update();
     while(c->WaitPrimitive()) gSystem->ProcessEvents();
-    c->Print("GM/RateNaoCorrigido.pdf");
+    c->Print("geigermuller/RateNaoCorrigido.pdf");
     
     delete d1;
     delete c;
-    
 }
