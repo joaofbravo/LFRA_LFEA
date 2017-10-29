@@ -13,7 +13,7 @@ CC = $(shell root-config --cxx) -std=c++11 $(ROOTINC)
 RM = rm -f
 
 .PRECIOUS: %.exe
-.PHONY: run main warn warnall debug clean clean%
+.PHONY: run main warn warnall debug cleanall clean cleanpdf clean%
 
 ########## Obj, Comp, Exec
 
@@ -56,12 +56,17 @@ debug:
 
 ########## Clean
 
+cleanall: clean cleanpdf
+	@true
+
 clean:
 	@echo Cleaning...
 	$(RM) $(DIR)/*.o
 	$(RM) $(DIR)/*.exe
-	$(RM) $(DIR)/*.pdf
 	@$(RM) $(DIR)/*~
+
+cleanpdf:
+	$(RM) $(DIR)/*.pdf
 
 clean%:
 	@echo Cleaning $(patsubst clean%,%,$@) in LFRA folders...

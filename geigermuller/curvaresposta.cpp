@@ -41,6 +41,7 @@ int main(){
     TPad* d1 = new TPad("Draw","Pad1",0,0,1,1,0,1);
     d1->Draw();
     d1->cd();
+
     DataSaver[0]->SetLineWidth(3);
     DataSaver[0]->SetLineColor(2);
     DataSaver[0]->SetMarkerColor(20);
@@ -55,7 +56,11 @@ int main(){
     func->SetLineWidth(3);
     DataSaver[0]->Fit("myfit", "U", "N");
     
-    cout << "Chi2: " <<func->GetChisquare() << endl;
+    double chi2 = func->GetChisquare();
+    double ndf = func->GetNDF();
+    cout << "Chi2: " << chi2 << endl;
+    cout << "ndf: " << ndf << endl;    
+    cout << "Chi2/ndf: " << chi2/ndf << endl;
     
     c->Modified();
     c->Update();
