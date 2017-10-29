@@ -42,18 +42,18 @@ int main(){
     d1->Draw();
     d1->cd();
 
-    DataSaver[0]->SetLineWidth(3);
+    DataSaver[0]->SetLineWidth(2);
     DataSaver[0]->SetLineColor(2);
     DataSaver[0]->SetMarkerColor(20);
     DataSaver[0]->GetXaxis()->SetTitle("Tensao [V]");
     DataSaver[0]->GetYaxis()->SetTitle("R_{m} / R_{o} []");
-    DataSaver[0]->SetTitle("Taxa de Contagem vs. Tensao");
+    DataSaver[0]->SetTitle("");
     DataSaver[0]->SetFillColor(6);
     DataSaver[0]->Draw("ap");
     
     TF1 *func = new TF1("myfit",fitfcn,700,2000,2);
     func->SetLineColor(4);
-    func->SetLineWidth(3);
+    func->SetLineWidth(2);
     DataSaver[0]->Fit("myfit", "U", "N");
     
     double chi2 = func->GetChisquare();
