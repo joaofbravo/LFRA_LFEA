@@ -46,7 +46,7 @@ int main(){
     DataSaver[0]->SetLineColor(2);
     DataSaver[0]->SetMarkerColor(20);
     DataSaver[0]->GetXaxis()->SetTitle("Tensao [V]");
-    DataSaver[0]->GetYaxis()->SetTitle("Taxa de Contagem [/s]");
+    DataSaver[0]->GetYaxis()->SetTitle("R_{m}/R_{o} []");
     DataSaver[0]->SetTitle("Taxa de Contagem vs. Tensao");
     DataSaver[0]->SetFillColor(6);
     DataSaver[0]->Draw("ap");
