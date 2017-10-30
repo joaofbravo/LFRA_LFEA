@@ -1,104 +1,141 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 #include <cmath>
+#include <ctime>
+
+#include "TROOT.h"
+#include "TSystem.h"
+#include "TStyle.h"
+#include "TApplication.h"
+#include "TCanvas.h"
+#include "TFrame.h"
+#include "TAxis.h"
+#include "TGraphErrors.h"
+#include "TH1F.h"
+#include "TF1.h"
+#include "TFormula.h"
+#include "TLegend.h"
+#include "TRandom.h"
 
 using namespace std;
+
 
 // Fit Function
 Double_t fitFunc(Double_t *x, Double_t *par)
 {
-    return par[1]*sin(par[0]*(x[0]-par[2])) / (par[0]*(x[0]-par[2])) + par[3];
+	Double_t fitval = par[0]*pow(x[0]-par[1],2) + par[2];
+	return fitval;
 }
 
-// Main routine
 
-void fit()
+// Main routine
+int main()
 {
     // Lines
-    const int dim = 10;
+    const Int_t dim = 10;
 
     // Constants
-    const double alpha = 1.;
+    const double alpha = 10.;
 
     // Variables
-    double tau[dim], etau[dim];
-    double K[dim], eK[dim];
-    double ptau, petau, pK, peK;
+    double xval[dim], exval[dim];
+    double yval[dim], eyval[dim];
+    double ptau, petau, pK, dump;
 
     // Open the file
-    ifstream table("D05B.txt");
+    ifstream table("tools/pila.txt");
 
     if (table.is_open())
     {
         for(int i=0; i<dim; i++)
         {
-            table >> ptau >> pK >> petau >> peK;
+            table >> ptau >> petau >> pK >> dump;
 
-            // Data treatment:
-            tau[i] = ptau*1e9;
-            etau[i] = petau*1e9;
+            // Data Treatment:
+            xval[i] = ptau*1e2;
+            exval[i] = petau*1e2;
 
-            K[i] = pK;
-            eK[i] = peK;
+            yval[i] = alpha*pK;
+            eyval[i] = sqrt(alpha*pK);
         }
+
+        table.close();
     }
     else cout << "Unable to open file!" << endl << endl;
 
     // Canvas
-    TCanvas *c1 = new TCanvas("c1", "LCET O CARALHO", 1220, 0, 700, 500);
+    TApplication* theApp = new TApplication("App", 0, 0);
+    TCanvas* c1 = new TCanvas("c1", "Fit Solution", 0, 0, 1400, 1000);
     c1->SetFillColor(kWhite);
     c1->SetGrid();
     c1->GetFrame()->SetFillColor(21);
     c1->GetFrame()->SetBorderSize(12);
 
-    // TGraph
-    TGraphErrors *graph = new TGraphErrors(dim, tau, K, etau, eK);
-    graph->SetTitle("");
-    graph->SetLineColor(kBlack);
-    graph->SetLineWidth(1);
-    graph->SetMarkerColor(kBlack);
-    graph->SetMarkerStyle(1); 
+    // Pad
+    TPad* d1 = new TPad("Draw", "Pad1", 0, 0, 1, 1, kWhite);
+    d1->Draw();
+    d1->cd();
 
-    // Axis Labels
-    graph->GetXaxis()->SetTitle("#tau (ns)");
-    // graph->GetXaxis()->SetRangeUser(0,2);
-    graph->GetYaxis()->SetTitle("K (u.a.)");
-    // graph->GetYaxis()->SetRangeUser(0.2,2.2);
+    // TGraphErrors
+    TGraphErrors *graph1 = new TGraphErrors(dim, xval, yval, exval, eyval);
+    graph1->SetLineColor(kRed);
+    graph1->SetLineWidth(2);
+    graph1->SetMarkerStyle(1);
+    graph1->SetMarkerColor(0);
+    graph1->SetFillColor(0);
+    graph1->SetTitle("");
+
+    // Axis
+    graph1->GetXaxis()->SetTitle("#tau (ns)");
+    graph1->GetYaxis()->SetTitle("K (u.a.)");
+    // graph1->GetXaxis()->SetRangeUser(0, 2);
+    // graph1->GetYaxis()->SetRangeUser(0, 10);
 
     // User fit region
-    double lwlim = 0.;
-    double uplim = 4.;
-    int Npar = 4;
+    Double_t lwlim = -100.;
+    Double_t uplim = 1100.;
+    Int_t Npar = 3;
 
-    TF1 *func = new TF1("myfit", fitFunc, lwlim, uplim, Npar);
-    func->SetLineColor(kRed);
-    func->SetLineWidth(2);
+    // Fit Function
+    TF1 *func1 = new TF1("myfit", fitFunc, lwlim, uplim, Npar);
+    func1->SetLineColor(kBlue);
+    func1->SetLineWidth(2);
 
     // Set initial values and parameter names
-    func->SetParameter(0, 1.78512e+00);
-    func->SetParameter(1, 6.89819e-01);
-    func->SetParameter(2, 4.07951e-01);
-    func->SetParameter(3, 6.49646e-01);
+    func1->SetParameter(0, -1.);
+    func1->SetParameter(1, 550.);
+    func1->SetParameter(2, 200.);
 
-    func->SetParNames("dw/2","A","B","C");
-    //func->SetParLimits(2, -10, -4);
-    //func->FixParameter(0, 1.186e-1);
-    //func->FixParameter(1, 8.5e-1);
+    func1->SetParNames("A","B","C");
+    //func1->SetParLimits(2, -10, -4);
+    //func1->FixParameter(0, 1.186e-1);
 
-    cout << endl;
-    graph->Draw("AP");
-    graph->Fit("myfit","UR");
-    func->Draw("same");
+    // Draw
+    graph1->Draw("AP");
+    graph1->Fit("myfit","UR");
 
     // Legend
-    leg = new TLegend(0.1,0.7,0.3,0.8);
+    TLegend *leg = new TLegend(0.68,0.82,0.9,0.88);
     leg->SetFillColor(0);
     leg->SetBorderSize(0);
     leg->SetTextSize(0.05);
-    leg->AddEntry(func,"\\Delta x = \\frac{\\lambda}{sin \\theta}","lp");
+    leg->AddEntry(func1,"Func do crl","lp");
     leg->Draw();
 
-    Double_t chi2 = func->GetChisquare()/func->GetNDF();
-    cout << "\nChi2/ndf value: " << chi2 << endl << endl;   
+    // Statistics
+    Double_t chi2 = func1->GetChisquare();
+    Double_t ndf = func1->GetNDF();
+    cout << "\n Chi2: " << chi2 << endl;
+    cout << " ndf: " << ndf << endl;    
+    cout << " Chi2/ndf: " << chi2/ndf << endl << endl;
+
+    c1->Modified();
+    c1->Update();
+    while(c1->WaitPrimitive()) gSystem->ProcessEvents();
+    c1->Print("tools/fit.pdf");
+
+    delete d1;
+    delete c1;
 }
