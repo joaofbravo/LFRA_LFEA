@@ -1,7 +1,7 @@
 # Basta mudarem a variavel DIR e a EXEC
 
 DIR  = geigermuller
-EXEC = curvaresposta
+EXEC = fator_retrodifusao
 
 ROOTINC = $(shell root-config --cflags)
 ROOTLIB = $(shell root-config --libs)
