@@ -16,8 +16,9 @@
 #include "TH1F.h"
 #include "TF1.h"
 #include "TFormula.h"
-#include "TLegend.h"
+#include "TMath.h"
 #include "TRandom.h"
+#include "TLegend.h"
 
 using namespace std;
 
