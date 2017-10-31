@@ -49,6 +49,7 @@ int main()
     
     // Pad
     TPad* d1 = new TPad("Draw", "Pad1", 0, 0, 1, 1, kWhite);
+    d1->SetGrid();
     d1->Draw();
     d1->cd();
 
@@ -64,7 +65,7 @@ int main()
     DataSaver[0]->GetXaxis()->SetTitle("#sqrt{(Z+1)Z/M}");
     DataSaver[0]->GetYaxis()->SetTitle("f_{bksc}^{sat}");
     // DataSaver[0]->GetXaxis()->SetRangeUser(0, 1200);
-    // DataSaver[0]->GetYaxis()->SetRangeUser(0, 10);
+    DataSaver[0]->GetYaxis()->SetRangeUser(0, 1.7);
 
     // User fit region
     Double_t lwlim = 0.;

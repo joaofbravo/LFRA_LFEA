@@ -76,6 +76,7 @@ int main()
 
     // Pad
     TPad* d1 = new TPad("Draw", "Pad1", 0, 0, 1, 1, kWhite);
+    d1->SetGrid();
     d1->Draw();
     d1->cd();
 
