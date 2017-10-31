@@ -60,7 +60,7 @@ int main()
     DataSaver[0]->SetTitle("");
         
     // Axis
-    DataSaver[0]->GetXaxis()->SetTitle("\\sqrt{\\frac{(Z+1)Z}{M}}");
+    DataSaver[0]->GetXaxis()->SetTitle("#sqrt{(Z+1)Z/M}");
     DataSaver[0]->GetYaxis()->SetTitle("f_{bksc}^{sat}");
     // DataSaver[0]->GetXaxis()->SetRangeUser(0, 1200);
     // DataSaver[0]->GetYaxis()->SetRangeUser(0, 10);
