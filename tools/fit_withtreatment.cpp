@@ -26,7 +26,7 @@ using namespace std;
 // Fit Function
 Double_t fitFunc(Double_t *x, Double_t *par)
 {
-	Double_t fitval = par[0]*pow(x[0]-par[1],2) + par[2];
+	Double_t fitval = par[0]*x[0] + par[1];
 	return fitval;
 }
 
@@ -34,10 +34,37 @@ Double_t fitFunc(Double_t *x, Double_t *par)
 // Main routine
 int main()
 {
-    // Create TGraphErrors from file
-    string FILE1 = "tools/pila.txt";
-    vector<TGraphErrors*> DataSaver;
-    DataSaver.push_back(new TGraphErrors(FILE1.c_str(),"%lg %lg %lg",""));
+    // Lines
+    const Int_t dim = 10;
+
+    // Constants
+    const double alpha = 1.;
+
+    // Variables
+    double xval[dim], exval[dim];
+    double yval[dim], eyval[dim];
+    double ptau, pK, peK, dump;
+
+    // Open the file
+    ifstream table("tools/pila.txt");
+
+    if (table.is_open())
+    {
+        for(int i=0; i<dim; i++)
+        {
+            table >> ptau >> pK >> peK;
+
+            // Data Treatment:
+            xval[i] = ptau;
+            exval[i] = 0;
+
+            yval[i] = pK;
+            eyval[i] = peK;
+        }
+
+        table.close();
+    }
+    else cout << "Unable to open file!" << endl << endl;
 
     // Canvas
     TApplication* theApp = new TApplication("App", 0, 0);
@@ -53,23 +80,24 @@ int main()
     d1->cd();
 
     // TGraphErrors
-    DataSaver[0]->SetLineColor(kRed);
-    DataSaver[0]->SetLineWidth(2);
-    DataSaver[0]->SetMarkerStyle(1);
-    DataSaver[0]->SetMarkerColor(0);
-    DataSaver[0]->SetFillColor(0);
-    DataSaver[0]->SetTitle("");
+    TGraphErrors *graph1 = new TGraphErrors(dim, xval, yval, exval, eyval);
+    graph1->SetLineColor(kRed);
+    graph1->SetLineWidth(2);
+    graph1->SetMarkerStyle(1);
+    graph1->SetMarkerColor(0);
+    graph1->SetFillColor(0);
+    graph1->SetTitle("");
 
     // Axis
-    DataSaver[0]->GetXaxis()->SetTitle("#tau (ns)");
-    DataSaver[0]->GetYaxis()->SetTitle("K (u.a.)");
-    // DataSaver[0]->GetXaxis()->SetRangeUser(0, 2);
-    // DataSaver[0]->GetYaxis()->SetRangeUser(0, 10);
+    graph1->GetXaxis()->SetTitle("#tau (ns)");
+    graph1->GetYaxis()->SetTitle("K (u.a.)");
+    // graph1->GetXaxis()->SetRangeUser(0, 2);
+    // graph1->GetYaxis()->SetRangeUser(0, 10);
 
     // User fit region
-    Double_t lwlim = -100.;
-    Double_t uplim = 1100.;
-    Int_t Npar = 3;
+    Double_t lwlim = 0.;
+    Double_t uplim = 20.;
+    Int_t Npar = 2;
 
     // Fit Function
     TF1 *func1 = new TF1("myfit", fitFunc, lwlim, uplim, Npar);
@@ -77,17 +105,16 @@ int main()
     func1->SetLineWidth(2);
 
     // Set initial values and parameter names
-    func1->SetParameter(0, -1.);
-    func1->SetParameter(1, 550.);
-    func1->SetParameter(2, 200.);
+    func1->SetParameter(0, 1.);
+    func1->SetParameter(1, 0.);
 
-    func1->SetParNames("A","B","C");
-    //func1->SetParLimits(2, -10, -4);
-    //func1->FixParameter(0, 1.186e-1);
+    func1->SetParNames("A","B");
+    //func1->SetParLimits(1, -10, 4);
+    //func1->FixParameter(0, 1.1);
 
     // Draw
-    DataSaver[0]->Draw("AP");
-    DataSaver[0]->Fit("myfit","UR");
+    graph1->Draw("AP");
+    graph1->Fit("myfit","UR");
 
     // Legend
     TLegend *leg = new TLegend(0.68,0.82,0.88,0.88);
@@ -107,7 +134,7 @@ int main()
     c1->Modified();
     c1->Update();
     while(c1->WaitPrimitive()) gSystem->ProcessEvents();
-    c1->Print("tools/fit.pdf");
+    c1->Print("tools/fit_withtreatment.pdf");
 
     delete d1;
     delete c1;
