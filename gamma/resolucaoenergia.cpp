@@ -26,7 +26,7 @@ using namespace std;
 // Fit Function
 Double_t fitFunc(Double_t *x, Double_t *par)
 {
-	Double_t fitval = par[0]*x[0] + par[1];
+	Double_t fitval = sqrt(par[0]/x[0]) + par[1];
 	return fitval;
 }
 
@@ -34,37 +34,10 @@ Double_t fitFunc(Double_t *x, Double_t *par)
 // Main routine
 int main()
 {
-    // Lines
-    const Int_t dim = 10;
-
-    // Constants
-    const double alpha = 1.;
-
-    // Variables
-    double xval[dim], exval[dim];
-    double yval[dim], eyval[dim];
-    double ptau, pK, peK, dump;
-
-    // Open the file
-    ifstream table("tools/pila.data");
-
-    if (table.is_open())
-    {
-        for(int i=0; i<dim; i++)
-        {
-            table >> ptau >> pK >> peK;
-
-            // Data Treatment:
-            xval[i] = ptau;
-            exval[i] = 0;
-
-            yval[i] = pK;
-            eyval[i] = peK;
-        }
-
-        table.close();
-    }
-    else cout << "Unable to open file!" << endl << endl;
+    // Create TGraphErrors from file
+    string FILE1 = "gamma/resolucaoenergia.data";
+    vector<TGraphErrors*> DataSaver;
+    DataSaver.push_back(new TGraphErrors(FILE1.c_str(),"%lg %lg %lg %lg",""));
 
     // Canvas
     TApplication* theApp = new TApplication("App", 0, 0);
@@ -81,23 +54,22 @@ int main()
     d1->cd();
 
     // TGraphErrors
-    TGraphErrors *graph1 = new TGraphErrors(dim, xval, yval, exval, eyval);
-    graph1->SetLineColor(kRed);
-    graph1->SetLineWidth(2);
-    graph1->SetMarkerStyle(1);
-    graph1->SetMarkerColor(0);
-    graph1->SetFillColor(0);
-    graph1->SetTitle("");
+    DataSaver[0]->SetLineColor(kRed);
+    DataSaver[0]->SetLineWidth(2);
+    DataSaver[0]->SetMarkerStyle(1);
+    DataSaver[0]->SetMarkerColor(0);
+    DataSaver[0]->SetFillColor(0);
+    DataSaver[0]->SetTitle("");
 
     // Axis
-    graph1->GetXaxis()->SetTitle("#tau (ns)");
-    graph1->GetYaxis()->SetTitle("K (u.a.)");
-    // graph1->GetXaxis()->SetRangeUser(0, 2);
-    // graph1->GetYaxis()->SetRangeUser(0, 10);
+    DataSaver[0]->GetXaxis()->SetTitle("E (KeV)");
+    DataSaver[0]->GetYaxis()->SetTitle("Resolucao (%)");
+    // DataSaver[0]->GetXaxis()->SetRangeUser(0, 2);
+    // DataSaver[0]->GetYaxis()->SetRangeUser(0, 10);
 
     // User fit region
     Double_t lwlim = 0.;
-    Double_t uplim = 20.;
+    Double_t uplim = 1600.;
     Int_t Npar = 2;
 
     // Fit Function
@@ -106,24 +78,12 @@ int main()
     func1->SetLineWidth(2);
 
     // Set initial values and parameter names
-    func1->SetParameter(0, 1.);
+    func1->SetParameter(0, 2.);
     func1->SetParameter(1, 0.);
 
-    func1->SetParNames("A","B");
-    //func1->SetParLimits(1, -10, 4);
-    //func1->FixParameter(0, 1.1);
-
     // Draw
-    graph1->Draw("AP");
-    graph1->Fit("myfit","UR");
-
-    // Legend
-    TLegend *leg = new TLegend(0.68,0.82,0.88,0.88);
-    leg->SetFillColor(0);
-    leg->SetBorderSize(0);
-    leg->SetTextSize(0.05);
-    leg->AddEntry(func1,"Func do crl","lp");
-    leg->Draw();
+    DataSaver[0]->Draw("AP");
+    DataSaver[0]->Fit("myfit","UR");
 
     // Statistics
     Double_t chi2 = func1->GetChisquare();
@@ -135,7 +95,7 @@ int main()
     c1->Modified();
     c1->Update();
     while(c1->WaitPrimitive()) gSystem->ProcessEvents();
-    c1->Print("tools/fit_withtreatment.pdf");
+    c1->Print("gamma/resolucaoenergia.pdf");
 
     delete d1;
     delete c1;
