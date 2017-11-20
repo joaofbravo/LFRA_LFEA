@@ -37,7 +37,7 @@ int main()
     // Create TGraphErrors from file
     string FILE1 = "tools/pila.data";
     vector<TGraphErrors*> DataSaver;
-    DataSaver.push_back(new TGraphErrors(FILE1.c_str(),"%lg %lg %lg",""));
+    DataSaver.push_back(new TGraphErrors(FILE1.c_str(),"%lg %lg %lg %lg",""));
 
     // Canvas
     TApplication* theApp = new TApplication("App", 0, 0);
@@ -78,11 +78,11 @@ int main()
     func1->SetLineWidth(2);
 
     // Set initial values and parameter names
-    func1->SetParameter(0, -1.);
-    func1->SetParameter(1, 550.);
-    func1->SetParameter(2, 200.);
+    // func1->SetParameter(0, -1.);
+    // func1->SetParameter(1, 550.);
+    // func1->SetParameter(2, 200.);
 
-    func1->SetParNames("A","B","C");
+    // func1->SetParNames("A","B","C");
     //func1->SetParLimits(2, -10, -4);
     //func1->FixParameter(0, 1.186e-1);
 
@@ -91,12 +91,12 @@ int main()
     DataSaver[0]->Fit("myfit","UR");
 
     // Legend
-    TLegend *leg = new TLegend(0.68,0.82,0.88,0.88);
-    leg->SetFillColor(0);
-    leg->SetBorderSize(0);
-    leg->SetTextSize(0.05);
-    leg->AddEntry(func1,"Func do crl","lp");
-    leg->Draw();
+    // TLegend *leg = new TLegend(0.68,0.82,0.88,0.88);
+    // leg->SetFillColor(0);
+    // leg->SetBorderSize(0);
+    // leg->SetTextSize(0.05);
+    // leg->AddEntry(func1,"Func do crl","lp");
+    // leg->Draw();
 
     // Statistics
     Double_t chi2 = func1->GetChisquare();

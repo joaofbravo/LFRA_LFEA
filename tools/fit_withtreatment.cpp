@@ -43,7 +43,7 @@ int main()
     // Variables
     double xval[dim], exval[dim];
     double yval[dim], eyval[dim];
-    double ptau, pK, peK, dump;
+    double X, Y, eX, eY;
 
     // Open the file
     ifstream table("tools/pila.data");
@@ -52,14 +52,14 @@ int main()
     {
         for(int i=0; i<dim; i++)
         {
-            table >> ptau >> pK >> peK;
+            table >> X >> Y >> eX >> eY;
 
             // Data Treatment:
-            xval[i] = ptau;
-            exval[i] = 0;
+            xval[i] = X;
+            exval[i] = eX;
 
-            yval[i] = pK;
-            eyval[i] = peK;
+            yval[i] = Y;
+            eyval[i] = eY;
         }
 
         table.close();
@@ -106,10 +106,10 @@ int main()
     func1->SetLineWidth(2);
 
     // Set initial values and parameter names
-    func1->SetParameter(0, 1.);
-    func1->SetParameter(1, 0.);
+    // func1->SetParameter(0, 1.);
+    // func1->SetParameter(1, 0.);
 
-    func1->SetParNames("A","B");
+    // func1->SetParNames("A","B");
     //func1->SetParLimits(1, -10, 4);
     //func1->FixParameter(0, 1.1);
 
@@ -118,12 +118,12 @@ int main()
     graph1->Fit("myfit","UR");
 
     // Legend
-    TLegend *leg = new TLegend(0.68,0.82,0.88,0.88);
-    leg->SetFillColor(0);
-    leg->SetBorderSize(0);
-    leg->SetTextSize(0.05);
-    leg->AddEntry(func1,"Func do crl","lp");
-    leg->Draw();
+    // TLegend *leg = new TLegend(0.68,0.82,0.88,0.88);
+    // leg->SetFillColor(0);
+    // leg->SetBorderSize(0);
+    // leg->SetTextSize(0.05);
+    // leg->AddEntry(func1,"Func do crl","lp");
+    // leg->Draw();
 
     // Statistics
     Double_t chi2 = func1->GetChisquare();
