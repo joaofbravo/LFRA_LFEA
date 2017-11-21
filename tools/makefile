@@ -69,7 +69,7 @@ cleanpdf:
 	$(RM) $(DIR)/*.pdf
 
 clean%:
-	@echo Cleaning $(patsubst clean%,%,$@) in LFRA folders...
-	@$(RM) */$(patsubst clean%,*%*.o,$@)
-	@$(RM) */$(patsubst clean%,*%*.exe,$@)
-	@$(RM) */$(patsubst clean%,*%*.pdf,$@)
+	@echo Cleaning $(patsubst clean%,%,$@) in LFRA/$(DIR) folders...
+	@$(RM) $(DIR)/$(patsubst clean%,*%*.o,$@)
+	@$(RM) $(DIR)/$(patsubst clean%,*%*.exe,$@)
+	@$(RM) $(DIR)/$(patsubst clean%,*%*.pdf,$@)
