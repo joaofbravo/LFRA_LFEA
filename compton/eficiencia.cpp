@@ -108,7 +108,7 @@ int main()
     c1->Modified();
     c1->Update();
     while(c1->WaitPrimitive()) gSystem->ProcessEvents();
-    c1->Print("compton/efficiency.pdf");
+    c1->Print("compton/eficiencia.pdf");
 
     delete d1;
     delete c1;
