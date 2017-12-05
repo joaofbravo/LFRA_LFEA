@@ -34,8 +34,10 @@ Double_t fitFunc(Double_t *x, Double_t *par)
 // Main routine
 int main()
 {
+    const string folder = "beta/";
+
     // Create TGraphErrors from file
-    string FILE1 = "gamma/resolucaoenergia.data";
+    string FILE1 = (folder + "resolucaoenergia.data").c_str();
     vector<TGraphErrors*> DataSaver;
     DataSaver.push_back(new TGraphErrors(FILE1.c_str(),"%lg %lg %lg %lg",""));
 
@@ -62,14 +64,14 @@ int main()
     DataSaver[0]->SetTitle("");
 
     // Axis
-    DataSaver[0]->GetXaxis()->SetTitle("E (KeV)");
+    DataSaver[0]->GetXaxis()->SetTitle("E (keV)");
     DataSaver[0]->GetYaxis()->SetTitle("Resolucao (%)");
     // DataSaver[0]->GetXaxis()->SetRangeUser(0, 2);
     // DataSaver[0]->GetYaxis()->SetRangeUser(0, 10);
 
     // User fit region
     Double_t lwlim = 0.;
-    Double_t uplim = 1600.;
+    Double_t uplim = 1100.;
     Int_t Npar = 2;
 
     // Fit Function
@@ -95,7 +97,7 @@ int main()
     c1->Modified();
     c1->Update();
     while(c1->WaitPrimitive()) gSystem->ProcessEvents();
-    c1->Print("gamma/resolucaoenergia.pdf");
+    c1->Print((folder + "resolucaoenergia.pdf").c_str());
 
     delete d1;
     delete c1;
