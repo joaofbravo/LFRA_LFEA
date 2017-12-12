@@ -80,14 +80,14 @@ int main()
     func1->SetLineWidth(2);
 
     // Set initial values and parameter names
-    func1->SetParameter(0, 500.);
-    func1->SetParameter(1, 0.2);
-    func1->SetParameter(2, -0.6);
+    func1->SetParameter(0, 3700.);
+    func1->SetParameter(1, 0.5);
+    func1->SetParameter(2, -1.1);
 
     // Draw
     DataSaver[0]->Draw("AP");
     DataSaver[0]->Fit("myfit","UR");
-
+»
     // Statistics
     Double_t chi2 = func1->GetChisquare();
     Double_t ndf = func1->GetNDF();
