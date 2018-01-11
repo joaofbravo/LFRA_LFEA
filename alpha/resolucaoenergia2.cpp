@@ -26,7 +26,7 @@ using namespace std;
 // Fit Function
 Double_t fitFunc(Double_t *x, Double_t *par)
 {
-	Double_t fitval = pow(par[0]/x[0], par[1]) - par[2];
+	Double_t fitval = par[0]-par[1]*x[0];
 	return fitval;
 }
 
@@ -70,9 +70,9 @@ int main()
     // DataSaver[0]->GetYaxis()->SetRangeUser(0, 10);
 
     // User fit region
-    Double_t lwlim = 0.;
-    Double_t uplim = 6000.;
-    Int_t Npar = 3;
+    Double_t lwlim = -100.;
+    Double_t uplim = 100.;
+    Int_t Npar = 2;
 
     // Fit Function
     TF1 *func1 = new TF1("myfit", fitFunc, lwlim, uplim, Npar);
@@ -80,9 +80,8 @@ int main()
     func1->SetLineWidth(2);
 
     // Set initial values and parameter names
-    func1->SetParameter(0, 1000);
-    func1->SetParameter(1, 0.5);
-    func1->SetParameter(2, 0.);
+    func1->SetParameter(0, 0);
+    func1->SetParameter(1, 100);
 
     // Draw
     DataSaver[0]->Draw("AP");
