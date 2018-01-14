@@ -80,8 +80,8 @@ int main()
     func1->SetLineWidth(2);
 
     // Set initial values and parameter names
-    func1->SetParameter(0, 0);
-    func1->SetParameter(1, 100);
+    func1->SetParameter(0, 0.2);
+    func1->SetParameter(1, 1);
 
     // Draw
     DataSaver[0]->Draw("AP");
