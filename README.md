@@ -1,4 +1,4 @@
-## LFRA
+## LFRA & LFEA
 Repo for all experiences
 
 General files:
