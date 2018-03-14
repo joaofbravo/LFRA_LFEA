@@ -84,6 +84,7 @@ int main()
     graph1->SetLineWidth(2);
     graph1->SetMarkerStyle(1);
     graph1->SetMarkerColor(0);
+    graph1->SetMarkerSize(2);
     graph1->SetFillColor(0);
     graph1->SetTitle("");
 

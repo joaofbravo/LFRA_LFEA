@@ -78,6 +78,7 @@ int main()
     // hist1->SetFillColor(0);
     // hist1->SetMarkerStyle(1);
     // hist1->SetMarkerColor(kRed);
+    // hist1->SetMarkerSize(2);
     hist1->SetStats(kFALSE);
     hist1->SetTitle("Coincidencias");
     
