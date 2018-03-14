@@ -34,11 +34,9 @@ Double_t fitFunc(Double_t *x, Double_t *par)
 // Main routine
 int main()
 {
-    // Lines
+    // Lines - Constants
     const Int_t dim = 10;
-
-    // Constants
-    const double alpha = 1.;
+    const Double_t alpha = 1.;
 
     // Variables
     double xval[dim], exval[dim];
@@ -110,8 +108,8 @@ int main()
     // func1->SetParameter(1, 0.);
 
     // func1->SetParNames("A","B");
-    //func1->SetParLimits(1, -10, 4);
-    //func1->FixParameter(0, 1.1);
+    // func1->SetParLimits(1, -10, 4);
+    // func1->FixParameter(0, 1.1);
 
     // Draw
     graph1->Draw("AP");
