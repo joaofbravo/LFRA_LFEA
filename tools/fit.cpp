@@ -35,7 +35,7 @@ Double_t fitFunc(Double_t *x, Double_t *par)
 int main()
 {
     // Create TGraphErrors from file
-    string FILE1 = "tools/pila.data";
+    string FILE1 = "tools/data/pila.data";
     vector<TGraphErrors*> DataSaver;
     DataSaver.push_back(new TGraphErrors(FILE1.c_str(),"%lg %lg %lg %lg",""));
 
@@ -108,7 +108,7 @@ int main()
     c1->Modified();
     c1->Update();
     while(c1->WaitPrimitive()) gSystem->ProcessEvents();
-    c1->Print("tools/fit.pdf");
+    c1->Print("tools/results/fit.pdf");
 
     delete d1;
     delete c1;

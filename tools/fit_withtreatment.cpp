@@ -44,7 +44,7 @@ int main()
     double X, Y, eX, eY;
 
     // Open the file
-    ifstream table("tools/pila.data");
+    ifstream table("tools/data/pila.data");
 
     if (table.is_open())
     {
@@ -133,7 +133,7 @@ int main()
     c1->Modified();
     c1->Update();
     while(c1->WaitPrimitive()) gSystem->ProcessEvents();
-    c1->Print("tools/fit_withtreatment.pdf");
+    c1->Print("tools/results/fit_withtreatment.pdf");
 
     delete d1;
     delete c1;
