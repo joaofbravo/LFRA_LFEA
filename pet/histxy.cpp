@@ -74,10 +74,6 @@ int main()
 
     // TH2F
     TH2F *hist1 = new TH2F("hist1", "Hist2D 1", bins, xlow, xup, bins, ylow, yup);
-    // hist1->SetLineColor(kBlue);
-    // hist1->SetFillColor(0);
-    // hist1->SetMarkerStyle(1);
-    // hist1->SetMarkerColor(kRed);
     hist1->SetStats(kFALSE);
     hist1->SetTitle("Coincidencias vs. Posicao da fonte");
     
@@ -94,14 +90,6 @@ int main()
 
     // Draw
     hist1->Draw("COLZ");
-
-    // Legend
-    // TLegend *leg = new TLegend(0.68,0.82,0.88,0.88);
-    // leg->SetFillColor(0);
-    // leg->SetBorderSize(0);
-    // leg->SetTextSize(0.05);
-    // leg->AddEntry(func1,"Func do crl","lp");
-    // leg->Draw();
 
     c1->Modified();
     c1->Update();
