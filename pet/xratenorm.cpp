@@ -27,7 +27,7 @@ using namespace std;
 // Fit Function
 Double_t fitFunc(Double_t *x, Double_t *par)
 {
-	Double_t fitval = par[0]*pow(x[0]-par[1],2) + par[2];
+	Double_t fitval = par[0]/par[2]*exp(-(x[0]-par[1])*(x[0]-par[1])/2/par[2]/par[2]);
 	return fitval;
 }
 
@@ -36,7 +36,7 @@ Double_t fitFunc(Double_t *x, Double_t *par)
 int main()
 {
     // Create TGraphErrors from file
-    string FILE1 = "tools/data/pila.data";
+    string FILE1 = "pet/data/xratenorm.data";
     vector<TGraphErrors*> DataSaver;
     DataSaver.push_back(new TGraphErrors(FILE1.c_str(),"%lg %lg %lg %lg",""));
 
@@ -56,22 +56,22 @@ int main()
 
     // TGraphErrors
     DataSaver[0]->SetLineColor(kRed);
-    DataSaver[0]->SetLineWidth(2);
-    DataSaver[0]->SetMarkerStyle(1);
+    DataSaver[0]->SetLineWidth(1);
+    DataSaver[0]->SetMarkerStyle(4);
+    DataSaver[0]->SetMarkerSize(1);
     DataSaver[0]->SetMarkerColor(0);
-    DataSaver[0]->SetMarkerSize(2);
     DataSaver[0]->SetFillColor(0);
-    DataSaver[0]->SetTitle("");
+    DataSaver[0]->SetTitle("Coincidencias vs. Posicao em x");
 
     // Axis
-    DataSaver[0]->GetXaxis()->SetTitle("#tau (ns)");
-    DataSaver[0]->GetYaxis()->SetTitle("K (u.a.)");
-    // DataSaver[0]->GetXaxis()->SetRangeUser(0, 2);
+    DataSaver[0]->GetXaxis()->SetTitle("X ('')");
+    DataSaver[0]->GetYaxis()->SetTitle("Rate (cts/s)");
+    DataSaver[0]->GetXaxis()->SetRangeUser(-2.1, 2.1);
     // DataSaver[0]->GetYaxis()->SetRangeUser(0, 10);
 
     // User fit region
-    Double_t lwlim = -100.;
-    Double_t uplim = 1100.;
+    Double_t lwlim = -2.1;
+    Double_t uplim = 2.1;
     Int_t Npar = 3;
 
     // Fit Function
@@ -80,37 +80,47 @@ int main()
     func1->SetLineWidth(2);
 
     // Set initial values and parameter names
-    // func1->SetParameter(0, -1.);
-    // func1->SetParameter(1, 550.);
-    // func1->SetParameter(2, 200.);
+    func1->SetParameter(0, 0.5);
+    func1->SetParameter(1, 0.);
+    func1->SetParameter(2, 0.33);
 
-    // func1->SetParNames("A","B","C");
-    // func1->SetParLimits(2, -10, -4);
-    // func1->FixParameter(0, 1.186e-1);
+    func1->SetParNames("A","mu","sigma");
+    //func1->SetParLimits(2, -10, -4);
+    //func1->FixParameter(0, 1.186e-1);
 
     // Draw
     DataSaver[0]->Draw("AP");
     DataSaver[0]->Fit("myfit","UR");
 
-    // Legend
-    // TLegend *leg = new TLegend(0.68,0.82,0.88,0.88);
-    // leg->SetFillColor(0);
-    // leg->SetBorderSize(0);
-    // leg->SetTextSize(0.05);
-    // leg->AddEntry(func1,"Func do crl","lp");
-    // leg->Draw();
+    // Vertical Lines - Shadow Region
+    Double_t xlow3sigma = func1->GetParameter(1)-3*func1->GetParameter(2);
+    Double_t xup3sigma = func1->GetParameter(1)+3*func1->GetParameter(2);
+
+    TLine* line1 = new TLine(xlow3sigma, DataSaver[0]->GetYaxis()->GetXmin(), 
+    	xlow3sigma, DataSaver[0]->GetYaxis()->GetXmax());
+    TLine* line2 = new TLine(xup3sigma, DataSaver[0]->GetYaxis()->GetXmin(), 
+    	xup3sigma, DataSaver[0]->GetYaxis()->GetXmax());
+    line1->SetVertical(kTRUE);
+    line2->SetVertical(kTRUE);
+    line1->SetLineColor(kBlack);
+    line2->SetLineColor(kBlack);
+    line1->SetLineWidth(4);
+    line2->SetLineWidth(4);
+    line1->Draw();
+    line2->Draw();
 
     // Statistics
     Double_t chi2 = func1->GetChisquare();
     Double_t ndf = func1->GetNDF();
     cout << "\n Chi2: " << chi2 << endl;
     cout << " ndf: " << ndf << endl;    
-    cout << " Chi2/ndf: " << chi2/ndf << endl << endl;
+    cout << " Chi2/ndf: " << chi2/ndf << endl << endl;    
+    cout << " mu+-3sigma: " << xlow3sigma << " ; " << xup3sigma << " ('')" << endl << endl;
 
     c1->Modified();
     c1->Update();
     while(c1->WaitPrimitive()) gSystem->ProcessEvents();
-    c1->Print("tools/results/fit.pdf");
+    c1->Print("pet/results/xratenorm.pdf");
 
     delete d1;
     delete c1;

@@ -19,6 +19,7 @@
 #include "TFormula.h"
 #include "TMath.h"
 #include "TRandom.h"
+#include "TLine.h"
 #include "TLegend.h"
 
 using namespace std;

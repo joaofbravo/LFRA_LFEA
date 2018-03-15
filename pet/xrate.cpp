@@ -55,7 +55,7 @@ int main()
     DataSaver[0]->SetTitle("Coincidencias vs. Posicao em x");
 
     // Axis
-    DataSaver[0]->GetXaxis()->SetTitle("X (pol)");
+    DataSaver[0]->GetXaxis()->SetTitle("X ('')");
     DataSaver[0]->GetYaxis()->SetTitle("Rate (cts/s)");
     DataSaver[0]->GetXaxis()->SetRangeUser(-2.1, 2.1);
     // DataSaver[0]->GetYaxis()->SetRangeUser(0, 10);

@@ -19,6 +19,7 @@
 #include "TFormula.h"
 #include "TMath.h"
 #include "TRandom.h"
+#include "TLine.h"
 #include "TLegend.h"
 
 using namespace std;
@@ -91,10 +92,25 @@ int main()
     // Draw
     hist1->Draw("COLZ");
 
+    // Vertical Lines - Shadow Region
+    Double_t xlow3sigma = -1.23402;
+    Double_t xup3sigma = 1.28289;
+
+    TLine* line1 = new TLine(xlow3sigma, ylow, xlow3sigma, yup);
+    TLine* line2 = new TLine(xup3sigma, ylow, xup3sigma, yup);
+    line1->SetVertical(kTRUE);
+    line2->SetVertical(kTRUE);
+    line1->SetLineColor(kBlack);
+    line2->SetLineColor(kBlack);
+    line1->SetLineWidth(4);
+    line2->SetLineWidth(4);
+    line1->Draw();
+    line2->Draw();
+
     c1->Modified();
     c1->Update();
     while(c1->WaitPrimitive()) gSystem->ProcessEvents();
-    c1->Print("pet/results/histXY.pdf");
+    c1->Print("pet/results/histXYshadow.pdf");
 
     delete d1;
     delete c1;
