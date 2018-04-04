@@ -1,8 +1,9 @@
-## LFRA & LFEA
-Repo for all experiences
+# LFRA & LFEA
+## Repo for all experiences
 
-General files:
+Preset files (\tools):
 - makefile
 - fit.cpp
-- fit_withtratment.cpp
+- fit_withtreatment.cpp
+- hist2d.cpp
 - errorpropagator.nb
