@@ -1,7 +1,7 @@
 # LFRA & LFEA
-## Repo for all experiences
+### Repo for all experiences
 
-Preset files (\tools):
+###### Preset files (\tools):
 - makefile
 - fit.cpp
 - fit_withtreatment.cpp
