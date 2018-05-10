@@ -27,7 +27,7 @@ using namespace std;
 // Fit Function
 Double_t fitFunc(Double_t *x, Double_t *par)
 {
-	Double_t fitval = par[0]*pow(x[0]-par[1],2) + par[2];
+	Double_t fitval = par[0]*sqrt(x[0]-par[1]);
 	return fitval;
 }
 
@@ -36,9 +36,9 @@ Double_t fitFunc(Double_t *x, Double_t *par)
 int main()
 {
     // Create TGraphErrors from file
-    string FILE1 = "tools/data/pila.data";
+    string FILE1 = "spec/data/semB.data";
     vector<TGraphErrors*> DataSaver;
-    DataSaver.push_back(new TGraphErrors(FILE1.c_str(),"%lg %lg %lg %lg","")); // X,Y,eX,eY
+    DataSaver.push_back(new TGraphErrors(FILE1.c_str(),"%lg %lg %lg","")); // X,Y,eY
 
     // Canvas
     TApplication* theApp = new TApplication("App", 0, 0);
@@ -64,15 +64,15 @@ int main()
     DataSaver[0]->SetTitle("");
 
     // Axis
-    DataSaver[0]->GetXaxis()->SetTitle("#tau (ns)");
-    DataSaver[0]->GetYaxis()->SetTitle("K (u.a.)");
+    DataSaver[0]->GetXaxis()->SetTitle("q");
+    DataSaver[0]->GetYaxis()->SetTitle("#theta (#circ)");
     // DataSaver[0]->GetXaxis()->SetRangeUser(0, 2);
     // DataSaver[0]->GetYaxis()->SetRangeUser(0, 10);
 
     // User fit region
-    Double_t lwlim = -100.;
-    Double_t uplim = 1100.;
-    Int_t Npar = 3;
+    Double_t lwlim = 0.4;
+    Double_t uplim = 6;
+    Int_t Npar = 2;
 
     // Fit Function
     TF1 *func1 = new TF1("myfit", fitFunc, lwlim, uplim, Npar);
@@ -80,9 +80,9 @@ int main()
     func1->SetLineWidth(2);
 
     // Set initial values and parameter names
-    // func1->SetParameter(0, -1.);
-    // func1->SetParameter(1, 550.);
-    // func1->SetParameter(2, 200.);
+    func1->SetParameter(0, 0.74439);
+    func1->SetParameter(1, 0.);
+    // func1->SetParameter(2, 0.);
 
     // func1->SetParNames("A","B","C");
     // func1->SetParLimits(2, -10, -4);
@@ -110,7 +110,7 @@ int main()
     c1->Modified();
     c1->Update();
     while(c1->WaitPrimitive()) gSystem->ProcessEvents();
-    c1->Print("tools/results/fit.pdf");
+    c1->Print("spec/results/semB.pdf");
 
     delete d1;
     delete c1;

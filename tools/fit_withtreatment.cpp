@@ -129,7 +129,7 @@ int main()
     Double_t chi2 = func1->GetChisquare();
     Double_t ndf = func1->GetNDF();
     cout << "\n Chi2: " << chi2 << endl;
-    cout << " ndf: " << ndf << endl;    
+    cout << " ndf: " << ndf << endl;
     cout << " Chi2/ndf: " << chi2/ndf << endl << endl;
 
     c1->Modified();
