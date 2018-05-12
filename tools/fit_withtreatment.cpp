@@ -83,8 +83,8 @@ int main()
     TGraphErrors *graph1 = new TGraphErrors(dim, xval, yval, exval, eyval);
     graph1->SetLineColor(kRed);
     graph1->SetLineWidth(2);
-    graph1->SetMarkerStyle(1);
-    graph1->SetMarkerColor(0);
+    graph1->SetMarkerStyle(8);
+    graph1->SetMarkerColor(0); // kPink
     graph1->SetMarkerSize(2);
     graph1->SetFillColor(0);
     graph1->SetTitle("");

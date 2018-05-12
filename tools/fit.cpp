@@ -57,8 +57,8 @@ int main()
     // TGraphErrors
     DataSaver[0]->SetLineColor(kRed);
     DataSaver[0]->SetLineWidth(2);
-    DataSaver[0]->SetMarkerStyle(1);
-    DataSaver[0]->SetMarkerColor(0);
+    DataSaver[0]->SetMarkerStyle(8);
+    DataSaver[0]->SetMarkerColor(0); // kPink
     DataSaver[0]->SetMarkerSize(2);
     DataSaver[0]->SetFillColor(0);
     DataSaver[0]->SetTitle("");
