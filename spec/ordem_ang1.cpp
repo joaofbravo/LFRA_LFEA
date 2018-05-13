@@ -27,18 +27,42 @@ using namespace std;
 // Fit Function
 Double_t fitFunc(Double_t *x, Double_t *par)
 {
-	Double_t fitval = par[0]*sqrt(x[0]-par[1]);
-	return fitval;
+    Double_t fitval = par[0]*sqrt(par[1]-x[0]*x[0]);
+    return fitval;
 }
 
 
 // Main routine
 int main()
 {
-    // Create TGraphErrors from file
-    string FILE1 = "spec/data/semB.data";
-    vector<TGraphErrors*> DataSaver;
-    DataSaver.push_back(new TGraphErrors(FILE1.c_str(),"%lg %lg %lg","")); // X,Y,eY
+    // Lines - Constants
+    const Int_t dim = 5;
+
+    // Variables
+    double xval[dim], exval[dim];
+    double yval[dim], eyval[dim];
+    double X, Y, eX, eY;
+
+    // Open the file
+    ifstream table("spec/data/ordem_ang1.data");
+
+    if (table.is_open())
+    {
+        for(int i=0; i<dim; i++)
+        {
+            table >> X >> Y >> eX >> eY;
+
+            // Data Treatment:
+            xval[i] = sin(TMath::Pi()/2 - X*TMath::Pi()/180);
+            exval[i] = eX*TMath::Pi()/180 * cos(TMath::Pi()/2 - X*TMath::Pi()/180);
+
+            yval[i] = Y;
+            eyval[i] = eY;
+        }
+
+        table.close();
+    }
+    else cout << "Unable to open file!" << endl << endl;
 
     // Canvas
     TApplication* theApp = new TApplication("App", 0, 0);
@@ -55,23 +79,25 @@ int main()
     d1->cd();
 
     // TGraphErrors
-    DataSaver[0]->SetLineColor(kRed);
-    DataSaver[0]->SetLineWidth(2);
-    DataSaver[0]->SetMarkerStyle(1);
-    DataSaver[0]->SetMarkerColor(0);
-    DataSaver[0]->SetMarkerSize(2);
-    DataSaver[0]->SetFillColor(0);
-    DataSaver[0]->SetTitle("");
+    TGraphErrors *graph1 = new TGraphErrors(dim, xval, yval, exval, eyval);
+    graph1->SetLineColor(kRed);
+    graph1->SetLineWidth(2);
+    graph1->SetMarkerStyle(8);
+    graph1->SetMarkerColor(0); // kPink
+    graph1->SetMarkerSize(2);
+    graph1->SetFillColor(0);
+    graph1->SetTitle("");
 
     // Axis
-    DataSaver[0]->GetXaxis()->SetTitle("q");
-    DataSaver[0]->GetYaxis()->SetTitle("#chi_{q} (#circ)");
-    // DataSaver[0]->GetXaxis()->SetRangeUser(0, 2);
-    // DataSaver[0]->GetYaxis()->SetRangeUser(0, 10);
+    graph1->GetXaxis()->SetTitle("sin(#theta)");
+    graph1->GetYaxis()->SetTitle("m");
+    // graph1->GetXaxis()->SetRangeUser(0, 2);
+    // graph1->GetYaxis()->SetRangeUser(0, 10);
+    graph1->GetYaxis()->SetNdivisions(5,0,0);
 
     // User fit region
-    Double_t lwlim = 0.4;
-    Double_t uplim = 6;
+    Double_t lwlim = 0.5;
+    Double_t uplim = 2.;
     Int_t Npar = 2;
 
     // Fit Function
@@ -80,17 +106,16 @@ int main()
     func1->SetLineWidth(2);
 
     // Set initial values and parameter names
-    func1->SetParameter(0, 0.74439);
-    func1->SetParameter(1, 0.);
-    // func1->SetParameter(2, 0.);
+    func1->SetParameter(0, 11500.);
+    func1->SetParameter(1, 1.45);
 
-    // func1->SetParNames("A","B","C");
-    // func1->SetParLimits(2, -10, -4);
-    // func1->FixParameter(0, 1.186e-1);
+    // func1->SetParNames("A","B");
+    // func1->SetParLimits(1, -10, 4);
+    // func1->FixParameter(0, 1.1);
 
     // Draw
-    DataSaver[0]->Draw("AP");
-    DataSaver[0]->Fit("myfit","UR");
+    graph1->Draw("AP");
+    graph1->Fit("myfit","UR");
 
     // Legend
     // TLegend *leg = new TLegend(0.68,0.82,0.88,0.88);
@@ -110,7 +135,7 @@ int main()
     c1->Modified();
     c1->Update();
     while(c1->WaitPrimitive()) gSystem->ProcessEvents();
-    c1->Print("spec/results/semB.pdf");
+    c1->Print("spec/results/ordem_ang1.pdf");
 
     delete d1;
     delete c1;

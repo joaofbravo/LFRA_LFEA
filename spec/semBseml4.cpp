@@ -36,7 +36,7 @@ Double_t fitFunc(Double_t *x, Double_t *par)
 int main()
 {
     // Create TGraphErrors from file
-    string FILE1 = "spec/data/semBcomP.data";
+    string FILE1 = "spec/data/semBseml4.data";
     vector<TGraphErrors*> DataSaver;
     DataSaver.push_back(new TGraphErrors(FILE1.c_str(),"%lg %lg %lg","")); // X,Y,eY
 
@@ -65,7 +65,7 @@ int main()
 
     // Axis
     DataSaver[0]->GetXaxis()->SetTitle("q");
-    DataSaver[0]->GetYaxis()->SetTitle("#theta (#circ)");
+    DataSaver[0]->GetYaxis()->SetTitle("#chi_{q} (#circ)");
     // DataSaver[0]->GetXaxis()->SetRangeUser(0, 2);
     // DataSaver[0]->GetYaxis()->SetRangeUser(0, 10);
 
@@ -110,7 +110,7 @@ int main()
     c1->Modified();
     c1->Update();
     while(c1->WaitPrimitive()) gSystem->ProcessEvents();
-    c1->Print("spec/results/semBcomP.pdf");
+    c1->Print("spec/results/semBseml4.pdf");
 
     delete d1;
     delete c1;

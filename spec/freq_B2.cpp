@@ -27,8 +27,8 @@ using namespace std;
 // Fit Function
 Double_t fitFunc(Double_t *x, Double_t *par)
 {
-	Double_t fitval = par[0]*sqrt(x[0]-par[1]);
-	return fitval;
+    Double_t fitval = par[0]/(4*TMath::Pi())*x[0] + par[1];
+    return fitval;
 }
 
 
@@ -36,7 +36,7 @@ Double_t fitFunc(Double_t *x, Double_t *par)
 int main()
 {
     // Create TGraphErrors from file
-    string FILE1 = "spec/data/semB.data";
+    string FILE1 = "spec/data/freq_B2.data";
     vector<TGraphErrors*> DataSaver;
     DataSaver.push_back(new TGraphErrors(FILE1.c_str(),"%lg %lg %lg","")); // X,Y,eY
 
@@ -64,14 +64,14 @@ int main()
     DataSaver[0]->SetTitle("");
 
     // Axis
-    DataSaver[0]->GetXaxis()->SetTitle("q");
-    DataSaver[0]->GetYaxis()->SetTitle("#chi_{q} (#circ)");
+    DataSaver[0]->GetXaxis()->SetTitle("B (T)");
+    DataSaver[0]->GetYaxis()->SetTitle("#Delta#nu (GHz)");
     // DataSaver[0]->GetXaxis()->SetRangeUser(0, 2);
     // DataSaver[0]->GetYaxis()->SetRangeUser(0, 10);
 
     // User fit region
-    Double_t lwlim = 0.4;
-    Double_t uplim = 6;
+    Double_t lwlim = 0.1;
+    Double_t uplim = 0.8;
     Int_t Npar = 2;
 
     // Fit Function
@@ -80,9 +80,8 @@ int main()
     func1->SetLineWidth(2);
 
     // Set initial values and parameter names
-    func1->SetParameter(0, 0.74439);
+    func1->SetParameter(0, 1.);
     func1->SetParameter(1, 0.);
-    // func1->SetParameter(2, 0.);
 
     // func1->SetParNames("A","B","C");
     // func1->SetParLimits(2, -10, -4);
@@ -110,7 +109,7 @@ int main()
     c1->Modified();
     c1->Update();
     while(c1->WaitPrimitive()) gSystem->ProcessEvents();
-    c1->Print("spec/results/semB.pdf");
+    c1->Print("spec/results/freq_B2.pdf");
 
     delete d1;
     delete c1;
