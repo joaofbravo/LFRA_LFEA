@@ -49,10 +49,10 @@ int main()
     c1->GetFrame()->SetBorderSize(12);
 
     // Pad
-    TPad* d1 = new TPad("Draw", "Pad1", 0, 0, 1, 1, kWhite);
-    d1->SetGrid();
-    d1->Draw();
-    d1->cd();
+    TPad* p1 = new TPad("p1", "Pad1", 0, 0, 1, 1, kWhite);
+    p1->SetGrid();
+    p1->Draw();
+    p1->cd();
 
     // TGraphErrors
     DataSaver[0]->SetLineColor(kRed);
@@ -112,6 +112,6 @@ int main()
     while(c1->WaitPrimitive()) gSystem->ProcessEvents();
     c1->Print("tools/results/fit.pdf");
 
-    delete d1;
+    delete p1;
     delete c1;
 }

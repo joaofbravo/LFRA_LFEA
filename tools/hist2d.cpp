@@ -60,17 +60,17 @@ int main()
 
     // Canvas
     TApplication* theApp = new TApplication("App", 0, 0);
-    TCanvas* c1 = new TCanvas("c1", "Fit Solution", 0, 0, 1400, 1000);
+    TCanvas* c1 = new TCanvas("c1", "Fit Solution", 0, 0, 700, 500);
     c1->SetFillColor(kWhite);
     c1->SetGrid();
     c1->GetFrame()->SetFillColor(21);
     c1->GetFrame()->SetBorderSize(12);
 
     // Pad
-    TPad* d1 = new TPad("Draw", "Pad1", 0, 0, 1, 1, kWhite);
-    d1->SetGrid();
-    d1->Draw();
-    d1->cd();
+    TPad* p1 = new TPad("p1", "Pad1", 0, 0, 1, 1, kWhite);
+    p1->SetGrid();
+    p1->Draw();
+    p1->cd();
 
     // TH2F
     TH2F *hist1 = new TH2F("hist1", "Hist2D 1", bins, xlow, xup, bins, ylow, yup);
@@ -109,6 +109,6 @@ int main()
     while(c1->WaitPrimitive()) gSystem->ProcessEvents();
     c1->Print("tools/results/hist2D.pdf");
 
-    delete d1;
+    delete p1;
     delete c1;
 }
