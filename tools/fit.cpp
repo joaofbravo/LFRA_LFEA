@@ -41,15 +41,16 @@ int main()
     DataSaver.push_back(new TGraphErrors(FILE1.c_str(),"%lg %lg %lg %lg","")); // X,Y,eX,eY
 
     // Canvas
-    TApplication* theApp = new TApplication("App", 0, 0);
-    TCanvas* c1 = new TCanvas("c1", "Fit Solution", 0, 0, 1400, 1000);
+    TApplication *theApp = new TApplication("App", 0, 0);
+    TCanvas *c1 = new TCanvas("c1", "Fit Solution", 0, 0, 700, 500);
     c1->SetFillColor(kWhite);
     c1->SetGrid();
     c1->GetFrame()->SetFillColor(21);
     c1->GetFrame()->SetBorderSize(12);
 
     // Pad
-    TPad* p1 = new TPad("p1", "Pad1", 0, 0, 1, 1, kWhite);
+    TPad *p1 = new TPad("p1", "Pad1", 0, 0, 1, 1, kWhite);
+    // p1->SetLogy();
     p1->SetGrid();
     p1->Draw();
     p1->cd();
