@@ -1,7 +1,7 @@
 ## LFRA & LFEA
-### Repo for all experiences
+### Lab experiments
 
-###### Preset files (*\tools*):
+###### Analysis templates (*\templates*):
 * makefile
 * fit.cpp
 	> *TGraphErrors, TF1, TFormula*
