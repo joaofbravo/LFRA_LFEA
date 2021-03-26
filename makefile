@@ -1,4 +1,4 @@
-# Basta mudarem a variavel DIR e a EXEC
+# Just change the variables DIR & EXEC
 
 DIR  = spec
 EXEC = freq_B1
